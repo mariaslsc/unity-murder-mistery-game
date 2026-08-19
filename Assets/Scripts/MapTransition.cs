@@ -27,12 +27,20 @@ public class MapTransition : MonoBehaviour
 
     async void FadeTransition(GameObject player)
     {
-        await ScreenFader.Instance.FadeOut();
+        if (confiner == null) confiner = FindFirstObjectByType<CinemachineConfiner2D>();
+        if (vcam == null) vcam = FindFirstObjectByType<CinemachineCamera>();
 
-        confiner.BoundingShape2D = mapBoundry;
+        // Verificăm dacă ScreenFader și confiner există înainte de a le folosi
+        if (ScreenFader.Instance != null)
+            await ScreenFader.Instance.FadeOut();
+
+        if (confiner != null)
+            confiner.BoundingShape2D = mapBoundry;
+
         UpdatePlayerPosition(player);
 
-        await ScreenFader.Instance.FadeIn();
+        if (ScreenFader.Instance != null)
+            await ScreenFader.Instance.FadeIn();
     }
 
     private void UpdatePlayerPosition(GameObject player)
